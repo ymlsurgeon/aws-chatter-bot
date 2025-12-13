@@ -10,7 +10,6 @@ class S3Input(BaseModel):
 
 
 
-
 class S3Tool(BaseTool):
     name: str = "s3_tool"
     description: str = "use this for s3 questions like how many buckets, which are public, whats in a bucket, sizes, etc. put bucket name for specific bucket or leave empty for all"
@@ -33,7 +32,7 @@ class S3Tool(BaseTool):
             for b in buckets:
                 name = b['Name']
                 
-                # check if public
+                # check if public (copied from stack overflow)
                 public = False
                 try:
                     acl = s3.get_bucket_acl(Bucket=name)

@@ -8,7 +8,7 @@ class EC2IPInput(BaseModel):
     ip_address: str = Field(description="ip address")
 
 
-# ec2 tool class
+
 class GetEC2InstanceSizeTool(BaseTool):
     name: str = "get_ec2_instance_size"
     description: str = "finds ec2 info by ip address"
@@ -69,7 +69,7 @@ class GetEC2InstanceSizeTool(BaseTool):
                 if tag['Key'] == 'Name':
                     name = tag['Value']
         
-        # make output
+        
         output = "ec2 instance:\n"
         output = output + f"id: {instance_id}\n"
         output = output + f"type: {instance_type}\n"
