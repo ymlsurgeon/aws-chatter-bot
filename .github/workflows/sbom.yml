@@ -34,12 +34,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         
+    - name: Install Syft
+      run: |
+        curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+        
     - name: Generate SBOM with Syft
-      uses: anchore/sbom-action@v0.15.9
-      with:
-        path: .
-        format: spdx-json
-        output-file: sbom.spdx.json
+      run: |
+        syft . -o spdx-json=sbom.spdx.json
         
     - name: Upload SBOM as artifact
       uses: actions/upload-artifact@v4
