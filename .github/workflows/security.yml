@@ -20,7 +20,7 @@ jobs:
       uses: actions/checkout@v4
       
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11'
         
@@ -28,16 +28,22 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install safety bandit
+        
+    - name: Install security tools
+      run: |
+        pip install safety==3.0.1 bandit[toml]==1.7.5
         
     - name: Run Safety check
-      run: safety check --json --output safety-report.json || true
+      run: |
+        safety check --json --output safety-report.json || echo "Safety check completed with warnings"
       
     - name: Run Bandit security scan
-      run: bandit -r . -f json -o bandit-report.json || true
+      run: |
+        bandit -r . -f json -o bandit-report.json -x ./.git,./venv,./env || echo "Bandit scan completed with findings"
       
     - name: Upload security reports
       uses: actions/upload-artifact@v4
+      if: always()
       with:
         name: security-reports
         path: |
@@ -49,13 +55,14 @@ jobs:
     permissions:
       contents: read
       security-events: write
+      actions: read
       
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
       
     - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@master
+      uses: aquasecurity/trivy-action@0.16.1
       with:
         scan-type: 'fs'
         scan-ref: '.'
@@ -63,7 +70,7 @@ jobs:
         output: 'trivy-results.sarif'
         
     - name: Upload Trivy scan results to GitHub Security tab
-      uses: github/codeql-action/upload-sarif@v2
+      uses: github/codeql-action/upload-sarif@v3
       if: always()
       with:
         sarif_file: 'trivy-results.sarif'

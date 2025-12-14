@@ -18,13 +18,14 @@ jobs:
       contents: read
       actions: read
       security-events: write
+      id-token: write
       
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
       
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11'
         
@@ -34,7 +35,7 @@ jobs:
         pip install -r requirements.txt
         
     - name: Generate SBOM with Syft
-      uses: anchore/sbom-action@v0
+      uses: anchore/sbom-action@v0.15.9
       with:
         path: .
         format: spdx-json
@@ -47,6 +48,6 @@ jobs:
         path: sbom.spdx.json
         
     - name: Upload SBOM to GitHub Dependency Graph
-      uses: advanced-security/spdx-dependency-submission-action@v0.0.1
+      uses: advanced-security/spdx-dependency-submission-action@v0.1.1
       with:
         filePath: sbom.spdx.json
