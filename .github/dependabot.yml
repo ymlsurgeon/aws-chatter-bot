@@ -6,6 +6,6 @@ updates:
       interval: "weekly"
     open-pull-requests-limit: 10
     reviewers:
-      - "strangeroot"  # Replace with your GitHub username if different
+      - "ymlsurgeon"  # Replace with your GitHub username if different
     assignees:
-      - "strangeroot"  # Replace with your GitHub username if different
+      - "ymlsurgeon"  # Replace with your GitHub username if different
